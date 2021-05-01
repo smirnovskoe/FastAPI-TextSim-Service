@@ -22,5 +22,5 @@ app.add_middleware(
 
 
 @app.get('/')
-def pong():
-    return {'Status': 'Up'}
+def get_service_status():
+    return {'status': 'up'}
