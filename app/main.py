@@ -1,7 +1,8 @@
-import uvicorn
 from fastapi import FastAPI
-from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+from model import text_similarity, model_multiling
 
 app = FastAPI()
 
@@ -19,6 +20,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+class TextIn(BaseModel):
+    first_text: str
+    second_text: str
+
+
+@app.get('/')
+def pong():
+    return {'Status': 'Up'}
+
+
+@app.post('/api/ml')
+def get_score(texts: TextIn):
+    score = text_similarity(texts.first_text, texts.second_text, model_multiling)
+    return {'score': score}
 
 
 @app.get('/')
